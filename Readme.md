@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Анастасия Петрова](https://up.htmlacademy.ru/javascript/20/user/296985).
-* Наставник: Антон Попов.
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
 
 ---
 
