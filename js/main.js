@@ -17,7 +17,7 @@ var Guest = {
 };
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var DESCRIPTION = ['Описание'];
-var Location = {
+var LocationAd = {
   MIN_X: 0,
   MAX_X: 1200,
   MIN_Y: 130,
@@ -29,8 +29,6 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 var COUNT_ADS = 8;
-var mapWidth = document.querySelector('.map').clientWidth;
-
 var PIN_SIZE = {
   x: 50,
   y: 70
@@ -48,7 +46,7 @@ var getRandomNumber = function (min, max) {
 
 /**
  * генерация случайного элемента массива
- * @param {array} min - минимальное число
+ * @param {array} array - массив
  * @return {string} - случайный элемент массива
  */
 var getRandomValue = function (array) {
@@ -74,11 +72,11 @@ var shuffleArr = function (arr) {
  * @return {array} - массив
  */
 var getRandomArray = function (arr) {
-  var randomArr = shuffleArr (arr);
-  var randomArrLenghth= getRandomNumber(1, randomArr.length)
+  var randomArr = shuffleArr(arr);
+  var randomArrLenghth = getRandomNumber(1, randomArr.length);
   var randomItems = randomArr.slice(0, randomArrLenghth);
   return randomItems;
-}
+};
 
 /**
  * генерация массива объявлений
@@ -106,12 +104,11 @@ var createAds = function (count) {
         photos: getRandomArray(PHOTOS)
       },
       location: {
-        x: getRandomNumber(Location.MIN_X, Location.MAX_X),
-        y: getRandomNumber(Location.MIN_Y, Location.MAX_Y)
+        x: getRandomNumber(LocationAd.MIN_X, LocationAd.MAX_X),
+        y: getRandomNumber(LocationAd.MIN_Y, LocationAd.MAX_Y)
       }
     };
   }
-  console.log(ad);
   return ad;
 };
 
@@ -120,8 +117,8 @@ element.classList.remove('map--faded');
 
 /**
  * создание метки на основе template
- * @param {object} - ?
- * @return {array} - ?
+ * @param {object} item - элемент
+ * @return {element} - элемент
  */
 var createMark = function (item) {
   var markTemplate = document.querySelector('#pin')
@@ -137,16 +134,16 @@ var createMark = function (item) {
 
 /**
  * генерация меток на основе созданного массива объявлений
- * @param {object} - ?
- * @return {object} - ?
+ * @param {object} dataAds - объект
+ * @return {object} объект
  */
 var generateMarks = function (dataAds) {
   var marksFragment = document.createDocumentFragment();
-  dataAds.forEach(function(dataAd){
+  dataAds.forEach(function (dataAd) {
     marksFragment.appendChild(createMark(dataAd));
   });
   return marksFragment;
-}
+};
 
 var marksMap = element.querySelector('.map__pins');
 var dataAds = createAds(COUNT_ADS);
