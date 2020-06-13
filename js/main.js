@@ -84,6 +84,17 @@ var getPhotos = function () {
 };
 
 /**
+ * сравнение массивов на совпадения
+ * @param {element} item - элемент
+ */
+var getFeatures = function (item) {
+  var featuresArr = item.offer.features;
+  for (var i = 0; i < FEATURES.length; i++) {
+    if (featuresArr.includes(FEATURES[i])) {
+    }
+  }
+};
+/**
  * получение массива случайной длины из элементов другого массива
  * @param {array} arr - массив
  * @return {array} - массив
@@ -180,6 +191,8 @@ var createCard = function (item) {
   card.querySelector('.popup__avatar').src = item.author.avatar;
   var popPhoto = card.querySelector('.popup__photos');
   popPhoto.appendChild(getPhotos(PHOTOS));
+  //var popFeatures = card.querySelector('.popup__features');
+  //popFeatures.appendChild(getFeatures(dataAds[0]));
 
   return card;
 };
