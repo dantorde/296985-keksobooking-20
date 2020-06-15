@@ -68,32 +68,37 @@ var shuffleArr = function (arr) {
 
 /**
  * получение фото из массива для карточки
- * @param {array} arr - массив
  * @return {element} - элементы
  */
 var getPhotos = function () {
-  for (var i = 0; i < dataAds[0].offer.photos.length; i++) {
-    var cardEl = document.querySelector('#card')
+  var cardEl = document.querySelector('#card')
     .content.querySelector('.map__card');
-    var photoContainer = cardEl.querySelector('.popup__photos');
+  var photoContainer = cardEl.querySelector('.popup__photos');
+  var photoArr = dataAds[0].offer.photos;
+  var photoFragment = document.createDocumentFragment();
+  photoArr.forEach(function (photoAr) {
     var photo = photoContainer.querySelector('.popup__photo').cloneNode(true);
-    photo.src = dataAds[0].offer.photos[i];
-    photoContainer.appendChild(photo);
-  }
-  return photoContainer;
+    photo.src = photoAr;
+    photoFragment.appendChild(photo);
+  });
+  return photoFragment;
 };
 
 /**
  * сравнение массивов на совпадения
- * @param {element} item - элемент
+ * @return {element} featureFragment - элементы
  */
-var getFeatures = function (item) {
-  var featuresArr = item.offer.features;
-  for (var i = 0; i < FEATURES.length; i++) {
-    if (featuresArr.includes(FEATURES[i])) {
-    }
-  }
+var getFeatures = function () {
+  var featuresArr = dataAds[0].offer.features;
+  var featureFragment = document.createDocumentFragment();
+  featuresArr.forEach(function (feature) {
+    var featureElement = document.createElement('li');
+    featureElement.classList.add('popup__feature', 'popup__feature--' + feature);
+    featureFragment.appendChild(featureElement);
+  });
+  return featureFragment;
 };
+
 /**
  * получение массива случайной длины из элементов другого массива
  * @param {array} arr - массив
@@ -114,13 +119,15 @@ var getRandomArray = function (arr) {
 var createAds = function (count) {
   var ad = [];
   for (var i = 0; i < count; i++) {
+    var xLocation = getRandomNumber(LocationAd.MIN_X, LocationAd.MAX_X);
+    var yLocation = getRandomNumber(LocationAd.MIN_Y, LocationAd.MAX_Y);
     ad[i] = {
       author: {
         avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
       offer: {
         title: TITLE,
-        address: location.x + ',' + location.y,
+        address: xLocation + ',' + yLocation,
         price: getRandomNumber(Price.MIN, Price.MAX),
         type: getRandomValue(TYPE_OF_HOUSING),
         rooms: getRandomNumber(Room.MIN, Room.MAX),
@@ -132,8 +139,8 @@ var createAds = function (count) {
         photos: getRandomArray(PHOTOS)
       },
       location: {
-        x: getRandomNumber(LocationAd.MIN_X, LocationAd.MAX_X),
-        y: getRandomNumber(LocationAd.MIN_Y, LocationAd.MAX_Y)
+        x: xLocation,
+        y: yLocation
       }
     };
   }
@@ -190,9 +197,11 @@ var createCard = function (item) {
   card.querySelector('.popup__description').textContent = item.offer.description;
   card.querySelector('.popup__avatar').src = item.author.avatar;
   var popPhoto = card.querySelector('.popup__photos');
-  popPhoto.appendChild(getPhotos(PHOTOS));
-  //var popFeatures = card.querySelector('.popup__features');
-  //popFeatures.appendChild(getFeatures(dataAds[0]));
+  popPhoto.innerHTML = '';
+  popPhoto.appendChild(getPhotos());
+  var popFeatures = card.querySelector('.popup__features');
+  popFeatures.innerHTML = '';
+  popFeatures.appendChild(getFeatures());
 
   return card;
 };
