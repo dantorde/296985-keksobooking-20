@@ -3,7 +3,7 @@
 var TITLE = ['Название объекта'];
 var TYPE_OF_HOUSING = ['palace', 'flat', 'house', 'bungalo'];
 var TIME = ['12:00', '13:00', '14:00'];
-var Prise = {
+var Price = {
   MIN: 1000,
   MAX: 1000000
 };
@@ -29,9 +29,9 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 var COUNT_ADS = 8;
-var PIN_SIZE = {
-  x: 50,
-  y: 70
+var PinSize = {
+  X: 50,
+  Y: 70
 };
 
 /**
@@ -67,6 +67,39 @@ var shuffleArr = function (arr) {
 };
 
 /**
+ * получение фото из массива для карточки
+ * @return {element} - элементы
+ */
+var getPhotos = function () {
+  var cardEl = document.querySelector('#card')
+    .content.querySelector('.map__card');
+  var photoContainer = cardEl.querySelector('.popup__photos');
+  var photoArr = dataAds[0].offer.photos;
+  var photoFragment = document.createDocumentFragment();
+  photoArr.forEach(function (photoAr) {
+    var photo = photoContainer.querySelector('.popup__photo').cloneNode(true);
+    photo.src = photoAr;
+    photoFragment.appendChild(photo);
+  });
+  return photoFragment;
+};
+
+/**
+ * сравнение массивов на совпадения
+ * @return {element} featureFragment - элементы
+ */
+var getFeatures = function () {
+  var featuresArr = dataAds[0].offer.features;
+  var featureFragment = document.createDocumentFragment();
+  featuresArr.forEach(function (feature) {
+    var featureElement = document.createElement('li');
+    featureElement.classList.add('popup__feature', 'popup__feature--' + feature);
+    featureFragment.appendChild(featureElement);
+  });
+  return featureFragment;
+};
+
+/**
  * получение массива случайной длины из элементов другого массива
  * @param {array} arr - массив
  * @return {array} - массив
@@ -86,14 +119,16 @@ var getRandomArray = function (arr) {
 var createAds = function (count) {
   var ad = [];
   for (var i = 0; i < count; i++) {
+    var xLocation = getRandomNumber(LocationAd.MIN_X, LocationAd.MAX_X);
+    var yLocation = getRandomNumber(LocationAd.MIN_Y, LocationAd.MAX_Y);
     ad[i] = {
       author: {
         avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
       offer: {
         title: TITLE,
-        address: location.x + ',' + location.y,
-        price: getRandomNumber(Prise.MIN, Prise.MAX),
+        address: xLocation + ',' + yLocation,
+        price: getRandomNumber(Price.MIN, Price.MAX),
         type: getRandomValue(TYPE_OF_HOUSING),
         rooms: getRandomNumber(Room.MIN, Room.MAX),
         guests: getRandomNumber(Guest.MIN, Guest.MAX),
@@ -104,16 +139,13 @@ var createAds = function (count) {
         photos: getRandomArray(PHOTOS)
       },
       location: {
-        x: getRandomNumber(LocationAd.MIN_X, LocationAd.MAX_X),
-        y: getRandomNumber(LocationAd.MIN_Y, LocationAd.MAX_Y)
+        x: xLocation,
+        y: yLocation
       }
     };
   }
   return ad;
 };
-
-var element = document.querySelector('.map');
-element.classList.remove('map--faded');
 
 /**
  * создание метки на основе template
@@ -124,8 +156,8 @@ var createMark = function (item) {
   var markTemplate = document.querySelector('#pin')
   .content.querySelector('.map__pin');
   var mark = markTemplate.cloneNode(true);
-  mark.style.left = item.location.x + PIN_SIZE.x / 2 + 'px';
-  mark.style.top = item.location.y - PIN_SIZE.y + 'px';
+  mark.style.left = item.location.x + PinSize.X / 2 + 'px';
+  mark.style.top = item.location.y - PinSize.Y + 'px';
   var img = mark.querySelector('img');
   img.src = item.author.avatar;
   img.alt = item.offer.title;
@@ -134,7 +166,7 @@ var createMark = function (item) {
 
 /**
  * генерация меток на основе созданного массива объявлений
- * @param {object} dataAds - объект
+ * @param {array} dataAds - массив объктов
  * @return {object} объект
  */
 var generateMarks = function (dataAds) {
@@ -145,6 +177,37 @@ var generateMarks = function (dataAds) {
   return marksFragment;
 };
 
-var marksMap = element.querySelector('.map__pins');
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
+
+var marksMap = map.querySelector('.map__pins');
 var dataAds = createAds(COUNT_ADS);
 marksMap.appendChild(generateMarks(dataAds));
+
+var createCard = function (item) {
+  var cardTemplate = document.querySelector('#card')
+  .content.querySelector('.map__card');
+  var card = cardTemplate.cloneNode(true);
+  card.querySelector('.popup__title').textContent = item.title;
+  card.querySelector('.popup__text--address').textContent = item.offer.address;
+  card.querySelector('.popup__text--price').textContent = item.offer.price + ' ₽/ночь';
+  card.querySelector('.popup__type').textContent = item.offer.type;
+  card.querySelector('.popup__text--capacity').textContent = item.offer.rooms + ' комнаты для ' + item.offer.guests + ' гостей';
+  card.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
+  card.querySelector('.popup__description').textContent = item.offer.description;
+  card.querySelector('.popup__avatar').src = item.author.avatar;
+  var popPhoto = card.querySelector('.popup__photos');
+  popPhoto.innerHTML = '';
+  popPhoto.appendChild(getPhotos());
+  var popFeatures = card.querySelector('.popup__features');
+  popFeatures.innerHTML = '';
+  popFeatures.appendChild(getFeatures());
+
+  return card;
+};
+
+var CardFragment = document.createDocumentFragment();
+CardFragment.appendChild(createCard(dataAds[0]));
+
+var cardEFilters = map.querySelector('.map__filters-container');
+map.insertBefore(CardFragment, cardEFilters);
