@@ -156,7 +156,7 @@ var createMark = function (item) {
   var markTemplate = document.querySelector('#pin')
   .content.querySelector('.map__pin');
   var mark = markTemplate.cloneNode(true);
-  mark.style.left = item.location.x + PinSize.X / 2 + 'px';
+  mark.style.left = item.location.x - PinSize.X / 2 + 'px';
   mark.style.top = item.location.y - PinSize.Y + 'px';
   var img = mark.querySelector('img');
   img.src = item.author.avatar;
@@ -178,12 +178,15 @@ var generateMarks = function (dataAds) {
 };
 
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+//map.classList.remove('map--faded');
 
 var marksMap = map.querySelector('.map__pins');
-var dataAds = createAds(COUNT_ADS);
-marksMap.appendChild(generateMarks(dataAds));
 
+/**
+ * генерация карточки на основе созданного массива объявлений
+ * @param {object} item - объект
+ * @return {object} card - объект
+ */
 var createCard = function (item) {
   var cardTemplate = document.querySelector('#card')
   .content.querySelector('.map__card');
@@ -206,8 +209,10 @@ var createCard = function (item) {
   return card;
 };
 
-var CardFragment = document.createDocumentFragment();
-CardFragment.appendChild(createCard(dataAds[0]));
+/*
+var cardFragment = document.createDocumentFragment();
+cardFragment.appendChild(createCard(dataAds[0]));
 
 var cardEFilters = map.querySelector('.map__filters-container');
-map.insertBefore(CardFragment, cardEFilters);
+map.insertBefore(cardFragment, cardEFilters);
+*/
