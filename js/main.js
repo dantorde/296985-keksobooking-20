@@ -1,218 +1,59 @@
 'use strict';
-
-var TITLE = ['Название объекта'];
-var TYPE_OF_HOUSING = ['palace', 'flat', 'house', 'bungalo'];
-var TIME = ['12:00', '13:00', '14:00'];
-var Price = {
-  MIN: 1000,
-  MAX: 1000000
-};
-var Room = {
-  MIN: 1,
-  MAX: 6
-};
-var Guest = {
-  MIN: 1,
-  MAX: 8
-};
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var DESCRIPTION = ['Описание'];
-var LocationAd = {
-  MIN_X: 0,
-  MAX_X: 1200,
-  MIN_Y: 130,
-  MAX_Y: 630,
-};
-var PHOTOS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-];
 var COUNT_ADS = 8;
-var PinSize = {
-  X: 50,
-  Y: 70
+var MAIN_MARK_SIZE = 62;
+var MARK_ARROW_HEIGHT = 22;
+var MinimumPrice = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
 };
-
-/**
- * генерация случайного числа из диапозона
- * @param {number} min - минимальное число
- * @param {number} max - максимальное число
- * @return {number} - случайное число
- */
-var getRandomNumber = function (min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
-/**
- * генерация случайного элемента массива
- * @param {array} array - массив
- * @return {string} - случайный элемент массива
- */
-var getRandomValue = function (array) {
-  return array[Math.floor(Math.random() * array.length)];
-};
-
-/**
- * перемешивание элементов массива в случайном порядке
- * @param {array} arr - массив
- * @return {array} - массив
- */
-var shuffleArr = function (arr) {
-  for (var i = arr.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
-  }
-  return arr;
-};
-
-/**
- * получение фото из массива для карточки
- * @return {element} - элементы
- */
-var getPhotos = function () {
-  var cardEl = document.querySelector('#card')
-    .content.querySelector('.map__card');
-  var photoContainer = cardEl.querySelector('.popup__photos');
-  var photoArr = dataAds[0].offer.photos;
-  var photoFragment = document.createDocumentFragment();
-  photoArr.forEach(function (photoAr) {
-    var photo = photoContainer.querySelector('.popup__photo').cloneNode(true);
-    photo.src = photoAr;
-    photoFragment.appendChild(photo);
-  });
-  return photoFragment;
-};
-
-/**
- * сравнение массивов на совпадения
- * @return {element} featureFragment - элементы
- */
-var getFeatures = function () {
-  var featuresArr = dataAds[0].offer.features;
-  var featureFragment = document.createDocumentFragment();
-  featuresArr.forEach(function (feature) {
-    var featureElement = document.createElement('li');
-    featureElement.classList.add('popup__feature', 'popup__feature--' + feature);
-    featureFragment.appendChild(featureElement);
-  });
-  return featureFragment;
-};
-
-/**
- * получение массива случайной длины из элементов другого массива
- * @param {array} arr - массив
- * @return {array} - массив
- */
-var getRandomArray = function (arr) {
-  var randomArr = shuffleArr(arr);
-  var randomArrLenghth = getRandomNumber(1, randomArr.length);
-  var randomItems = randomArr.slice(0, randomArrLenghth);
-  return randomItems;
-};
-
-/**
- * генерация массива объявлений
- * @param {number} count - длина массива
- * @return {array} - массив
- */
-var createAds = function (count) {
-  var ad = [];
-  for (var i = 0; i < count; i++) {
-    var xLocation = getRandomNumber(LocationAd.MIN_X, LocationAd.MAX_X);
-    var yLocation = getRandomNumber(LocationAd.MIN_Y, LocationAd.MAX_Y);
-    ad[i] = {
-      author: {
-        avatar: 'img/avatars/user0' + (i + 1) + '.png'
-      },
-      offer: {
-        title: TITLE,
-        address: xLocation + ',' + yLocation,
-        price: getRandomNumber(Price.MIN, Price.MAX),
-        type: getRandomValue(TYPE_OF_HOUSING),
-        rooms: getRandomNumber(Room.MIN, Room.MAX),
-        guests: getRandomNumber(Guest.MIN, Guest.MAX),
-        checkin: getRandomValue(TIME),
-        checkout: getRandomValue(TIME),
-        features: getRandomArray(FEATURES),
-        description: DESCRIPTION,
-        photos: getRandomArray(PHOTOS)
-      },
-      location: {
-        x: xLocation,
-        y: yLocation
-      }
-    };
-  }
-  return ad;
-};
-
-/**
- * создание метки на основе template
- * @param {object} item - элемент
- * @return {element} - элемент
- */
-var createMark = function (item) {
-  var markTemplate = document.querySelector('#pin')
-  .content.querySelector('.map__pin');
-  var mark = markTemplate.cloneNode(true);
-  mark.style.left = item.location.x - PinSize.X / 2 + 'px';
-  mark.style.top = item.location.y - PinSize.Y + 'px';
-  var img = mark.querySelector('img');
-  img.src = item.author.avatar;
-  img.alt = item.offer.title;
-  return mark;
-};
-
-/**
- * генерация меток на основе созданного массива объявлений
- * @param {array} dataAds - массив объктов
- * @return {object} объект
- */
-var generateMarks = function (dataAds) {
-  var marksFragment = document.createDocumentFragment();
-  dataAds.forEach(function (dataAd) {
-    marksFragment.appendChild(createMark(dataAd));
-  });
-  return marksFragment;
-};
-
 var map = document.querySelector('.map');
-//map.classList.remove('map--faded');
+var adForm = document.querySelector('.ad-form');
+adForm.classList.add('ad-form--disabled');
+var fieldsetAdFormArr = adForm.querySelectorAll('fieldset');
+var filterForm = document.querySelector('.map__filters');
+var fieldsetFilterFormArr = filterForm.querySelectorAll('fieldset');
+fieldsetAdFormArr.forEach(function (fieldsetItem) {
+  fieldsetItem.setAttribute('disabled', 'disabled');
+});
+fieldsetFilterFormArr.forEach(function (fieldsetItem) {
+  fieldsetItem.setAttribute('disabled', 'disabled');
+});
 
-var marksMap = map.querySelector('.map__pins');
+var mainMark = document.querySelector('.map__pin--main');
+var mainMarkX = parseInt(mainMark.style.left, 10);
+var mainMarkY = parseInt(mainMark.style.top, 10);
+var inputAddress = document.querySelector('#address');
+inputAddress.value = Math.round(mainMarkX + MAIN_MARK_SIZE / 2) + ', ' + Math.round(mainMarkY + MAIN_MARK_SIZE + MARK_ARROW_HEIGHT);
+var typeHousing = document.querySelector('#type');
+var rentalPrice = document.querySelector('#price');
+rentalPrice.min = MinimumPrice[typeHousing.value];
+rentalPrice.placeholder = MinimumPrice[typeHousing.value];
 
 /**
- * генерация карточки на основе созданного массива объявлений
- * @param {object} item - объект
- * @return {object} card - объект
+ * активации карты, формы и фильтра
  */
-var createCard = function (item) {
-  var cardTemplate = document.querySelector('#card')
-  .content.querySelector('.map__card');
-  var card = cardTemplate.cloneNode(true);
-  card.querySelector('.popup__title').textContent = item.title;
-  card.querySelector('.popup__text--address').textContent = item.offer.address;
-  card.querySelector('.popup__text--price').textContent = item.offer.price + ' ₽/ночь';
-  card.querySelector('.popup__type').textContent = item.offer.type;
-  card.querySelector('.popup__text--capacity').textContent = item.offer.rooms + ' комнаты для ' + item.offer.guests + ' гостей';
-  card.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
-  card.querySelector('.popup__description').textContent = item.offer.description;
-  card.querySelector('.popup__avatar').src = item.author.avatar;
-  var popPhoto = card.querySelector('.popup__photos');
-  popPhoto.innerHTML = '';
-  popPhoto.appendChild(getPhotos());
-  var popFeatures = card.querySelector('.popup__features');
-  popFeatures.innerHTML = '';
-  popFeatures.appendChild(getFeatures());
-
-  return card;
+var makeActive = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  fieldsetAdFormArr.forEach(function (fieldsetItem) {
+    fieldsetItem.removeAttribute('disabled', 'disabled');
+  });
+  fieldsetFilterFormArr.forEach(function (fieldsetItem) {
+    fieldsetItem.removeAttribute('disabled', 'disabled');
+  });
+  window.map.createMarks;
 };
 
-/*
-var cardFragment = document.createDocumentFragment();
-cardFragment.appendChild(createCard(dataAds[0]));
+mainMark.addEventListener('mousedown', function (evt) {
+  if (evt.button === 0) {
+    makeActive();
+  }
+});
 
-var cardEFilters = map.querySelector('.map__filters-container');
-map.insertBefore(cardFragment, cardEFilters);
-*/
+mainMark.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Enter') {
+    makeActive();
+  }
+});

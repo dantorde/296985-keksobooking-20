@@ -61,39 +61,7 @@ var setTimeValue = function (evt) {
   });
 };
 
-/**
- * активации карты, формы и фильтра
- */
-var makeActive = function () {
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-  fieldsetAdFormArr.forEach(function(fieldsetItem){
-    fieldsetItem.removeAttribute('disabled', 'disabled');
-  });
-  fieldsetFilterFormArr.forEach(function(fieldsetItem){
-    fieldsetItem.removeAttribute('disabled', 'disabled');
-  });
-  roomsSelect.addEventListener('change', checkGuestRoomConformity);
-  guestsSelect.addEventListener('change', checkGuestRoomConformity);
-  var timeFields = document.querySelector('.ad-form__element--time');
-  timeFields.addEventListener('change', setTimeValue);
-};
 
-mainMark.addEventListener('mousedown', function (evt) {
-  if (evt.button === 0) {
-    makeActive();
-    var dataAds = createAds(COUNT_ADS);
-    marksMap.appendChild(generateMarks(dataAds));
-  }
-});
-
-mainMark.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Enter') {
-    makeActive();
-    var dataAds = createAds(COUNT_ADS);
-    marksMap.appendChild(generateMarks(dataAds));
-  }
-});
 
 /**
  * Проверяет валидность залоговока (ограничение по длине)
@@ -110,11 +78,11 @@ titleAdInput.addEventListener('invalid', function () {
 });
 
 titleAdInput.addEventListener('input', function () {
-var valueLength = titleAdInput.value.length;
+  var valueLength = titleAdInput.value.length;
   if (valueLength < minTitleLength) {
     titleAdInput.setCustomValidity('Ещё ' + (minTitleLength - valueLength) + ' симв.');
   } else if (valueLength > maxTitleLength) {
-    titleAdInput.setCustomValidity('Удалите лишние ' + (valueLength - maxTitleLength) +' симв.');
+    titleAdInput.setCustomValidity('Удалите лишние ' + (valueLength - maxTitleLength) + ' симв.');
   } else {
     titleAdInput.setCustomValidity('');
   }
@@ -127,3 +95,8 @@ typeHousing.addEventListener('change', function () {
   rentalPrice.min = MinimumPrice[typeHousing.value];
   rentalPrice.placeholder = MinimumPrice[typeHousing.value];
 });
+
+roomsSelect.addEventListener('change', checkGuestRoomConformity);
+guestsSelect.addEventListener('change', checkGuestRoomConformity);
+var timeFields = document.querySelector('.ad-form__element--time');
+timeFields.addEventListener('change', setTimeValue);
