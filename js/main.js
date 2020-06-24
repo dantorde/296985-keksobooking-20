@@ -43,7 +43,9 @@ var makeActive = function () {
   fieldsetFilterFormArr.forEach(function (fieldsetItem) {
     fieldsetItem.removeAttribute('disabled', 'disabled');
   });
-  window.map.createMarks;
+  var dataAds = window.data.createAds(8);
+  console.log(dataAds);
+  window.map.generateMarks(dataAds);
 };
 
 mainMark.addEventListener('mousedown', function (evt) {

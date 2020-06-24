@@ -2,7 +2,7 @@
 
 (function () {
 var marksMap = document.querySelector('.map__pins');
-  var dataAds = window.data.createAds(8);
+var dataAds = window.data.createAds(8);
   console.log(dataAds);
 
       /**
@@ -16,9 +16,11 @@ var marksMap = document.querySelector('.map__pins');
       dataAds.forEach(function (dataAd) {
         marksFragment.appendChild(window.mark.createMark(dataAd));
       });
-      return marksFragment;
+      return marksMap.appendChild(marksFragment);
+  };
 
-    },
-    marksMap.appendChild(marksFragment);
-  }
+  window.map = {
+    generateMarks: generateMarks
+  };
 })();
+
