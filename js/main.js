@@ -45,6 +45,7 @@ var makeActive = function () {
   });
   var dataAds = window.data.createAds(8);
   console.log(dataAds);
+  debugger;
   window.map.generateMarks(dataAds);
 };
 

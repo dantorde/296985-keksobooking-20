@@ -111,4 +111,4 @@
   window.data = {
     createAds: createAds
   };
-}) ();
+})();
