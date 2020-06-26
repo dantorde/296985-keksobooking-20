@@ -1,6 +1,6 @@
 'use strict';
 
-window.card = ( function () {
+(function () {
   /**
    * получение фото из массива для карточки
    * @return {element} - элементы
@@ -34,32 +34,34 @@ window.card = ( function () {
     return featureFragment;
   };
 
-  return {
-    /**
-     * генерация карточки на основе созданного массива объявлений
-     * @param {object} item - объект
-     * @return {object} card - объект
-     */
-    var createCard = function (item) {
-      var cardTemplate = document.querySelector('#card')
-      .content.querySelector('.map__card');
-      var card = cardTemplate.cloneNode(true);
-      card.querySelector('.popup__title').textContent = item.title;
-      card.querySelector('.popup__text--address').textContent = item.offer.address;
-      card.querySelector('.popup__text--price').textContent = item.offer.price + ' ₽/ночь';
-      card.querySelector('.popup__type').textContent = item.offer.type;
-      card.querySelector('.popup__text--capacity').textContent = item.offer.rooms + ' комнаты для ' + item.offer.guests + ' гостей';
-      card.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
-      card.querySelector('.popup__description').textContent = item.offer.description;
-      card.querySelector('.popup__avatar').src = item.author.avatar;
-      var popPhoto = card.querySelector('.popup__photos');
-      popPhoto.innerHTML = '';
-      popPhoto.appendChild(getPhotos());
-      var popFeatures = card.querySelector('.popup__features');
-      popFeatures.innerHTML = '';
-      popFeatures.appendChild(getFeatures());
+  /**
+   * генерация карточки на основе созданного массива объявлений
+   * @param {object} item - объект
+   * @return {object} card - объект
+   */
+  var createCard = function (item) {
+    var cardTemplate = document.querySelector('#card')
+    .content.querySelector('.map__card');
+    var card = cardTemplate.cloneNode(true);
+    card.querySelector('.popup__title').textContent = item.title;
+    card.querySelector('.popup__text--address').textContent = item.offer.address;
+    card.querySelector('.popup__text--price').textContent = item.offer.price + ' ₽/ночь';
+    card.querySelector('.popup__type').textContent = item.offer.type;
+    card.querySelector('.popup__text--capacity').textContent = item.offer.rooms + ' комнаты для ' + item.offer.guests + ' гостей';
+    card.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
+    card.querySelector('.popup__description').textContent = item.offer.description;
+    card.querySelector('.popup__avatar').src = item.author.avatar;
+    var popPhoto = card.querySelector('.popup__photos');
+    popPhoto.innerHTML = '';
+    popPhoto.appendChild(getPhotos());
+    var popFeatures = card.querySelector('.popup__features');
+    popFeatures.innerHTML = '';
+    popFeatures.appendChild(getFeatures());
 
-      return card;
-    };
-  }
+    return card;
+  };
+
+  window.card = {
+    create: createCard
+  };
 }) ();

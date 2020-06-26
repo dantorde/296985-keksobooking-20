@@ -22,7 +22,7 @@
     return mark;
   };
   window.mark = {
-    createMark: createMark
+    create: createMark
   };
 
 })();

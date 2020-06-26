@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
+  var COUNT_ADS = 8;
   var marksMap = document.querySelector('.map__pins');
-  var dataAds = window.data.createAds(8);
-  console.log(dataAds);
+  var dataAds = window.data.createAds(COUNT_ADS);
   /**
   * генерация меток на основе созданного массива объявлений
   * @param {array} dataAds - массив объктов
@@ -11,9 +11,8 @@
   */
   var generateMarks = function (dataAds) {
     var marksFragment = document.createDocumentFragment();
-    console.log(dataAds);
     dataAds.forEach(function (dataAd) {
-      marksFragment.appendChild(window.mark.createMark(dataAd));
+      marksFragment.appendChild(window.mark.create(dataAd));
     });
     return marksMap.appendChild(marksFragment);
   };
