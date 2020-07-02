@@ -1,9 +1,7 @@
 'use strict';
 
 (function () {
-  var COUNT_ADS = 8;
   var marksMap = document.querySelector('.map__pins');
-  var dataAds = window.data.createAds(COUNT_ADS);
   /**
   * генерация меток на основе созданного массива объявлений
   * @param {array} dataAds - массив объктов
