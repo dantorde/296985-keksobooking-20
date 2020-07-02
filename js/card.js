@@ -3,13 +3,14 @@
 (function () {
   /**
    * получение фото из массива для карточки
+   * @param {object} dataAd - элемент массива объявлений
    * @return {element} - элементы
    */
-  var getPhotos = function () {
+  var getPhotos = function (dataAd) {
     var cardEl = document.querySelector('#card')
       .content.querySelector('.map__card');
     var photoContainer = cardEl.querySelector('.popup__photos');
-    var photoArr = dataAds[0].offer.photos;
+    var photoArr = dataAd.offer.photos;
     var photoFragment = document.createDocumentFragment();
     photoArr.forEach(function (photoAr) {
       var photo = photoContainer.querySelector('.popup__photo').cloneNode(true);
@@ -21,10 +22,11 @@
 
   /**
    * сравнение массивов на совпадения
+   * @param {object} dataAd - элемент массива объявлений
    * @return {element} featureFragment - элементы
    */
-  var getFeatures = function () {
-    var featuresArr = dataAds[0].offer.features;
+  var getFeatures = function (dataAd) {
+    var featuresArr = dataAd.offer.features;
     var featureFragment = document.createDocumentFragment();
     featuresArr.forEach(function (feature) {
       var featureElement = document.createElement('li');
@@ -36,32 +38,32 @@
 
   /**
    * генерация карточки на основе созданного массива объявлений
-   * @param {object} item - объект
+   * @param {object} dataAd - элемент массива объявлений
    * @return {object} card - объект
    */
-  var createCard = function (item) {
+  var createCard = function (dataAd) {
     var cardTemplate = document.querySelector('#card')
     .content.querySelector('.map__card');
     var card = cardTemplate.cloneNode(true);
-    card.querySelector('.popup__title').textContent = item.title;
-    card.querySelector('.popup__text--address').textContent = item.offer.address;
-    card.querySelector('.popup__text--price').textContent = item.offer.price + ' ₽/ночь';
-    card.querySelector('.popup__type').textContent = item.offer.type;
-    card.querySelector('.popup__text--capacity').textContent = item.offer.rooms + ' комнаты для ' + item.offer.guests + ' гостей';
-    card.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
-    card.querySelector('.popup__description').textContent = item.offer.description;
-    card.querySelector('.popup__avatar').src = item.author.avatar;
+    card.querySelector('.popup__title').textContent = dataAd.title;
+    card.querySelector('.popup__text--address').textContent = dataAd.offer.address;
+    card.querySelector('.popup__text--price').textContent = dataAd.offer.price + ' ₽/ночь';
+    card.querySelector('.popup__type').textContent = dataAd.offer.type;
+    card.querySelector('.popup__text--capacity').textContent = dataAd.offer.rooms + ' комнаты для ' + dataAd.offer.guests + ' гостей';
+    card.querySelector('.popup__text--time').textContent = 'Заезд после ' + dataAd.offer.checkin + ', выезд до ' + dataAd.offer.checkout;
+    card.querySelector('.popup__description').textContent = dataAd.offer.description;
+    card.querySelector('.popup__avatar').src = dataAd.author.avatar;
     var popPhoto = card.querySelector('.popup__photos');
     popPhoto.innerHTML = '';
-    popPhoto.appendChild(getPhotos());
+    popPhoto.appendChild(getPhotos(dataAd));
     var popFeatures = card.querySelector('.popup__features');
     popFeatures.innerHTML = '';
-    popFeatures.appendChild(getFeatures());
-
+    popFeatures.appendChild(getFeatures(dataAd));
     return card;
   };
+
 
   window.card = {
     create: createCard
   };
-}) ();
+})();

@@ -3,22 +3,19 @@
 (function () {
   var mapBlock = document.querySelector('.map');
   var mainMark = document.querySelector('.map__pin--main');
-  var marksMap = document.querySelector('.map__pins');
 
   /**
-  * генерация меток на основе созданного массива объявлений
-  * @param {array} dataAds - массив объктов
-  * @return {object} объект
+  * выводит элементы на карту в случае успешной загрузки с сервера
+  * @param {array} dataAds - массив объявлений
   */
   var onLoad = function (dataAds) {
-    var marksFragment = document.createDocumentFragment();
-    dataAds.forEach(function (dataAd) {
-      marksFragment.appendChild(window.mark.create(dataAd));
-    });
-    return marksMap.appendChild(marksFragment);
+    window.map.generateMarks(dataAds);
   };
 
-
+  /**
+  * выводит ошибку в случае неуспешной загрузки с сервера
+  * @param {param} errorMessage - сообщение
+  */
   var onError = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
@@ -30,6 +27,7 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
+
   /**
   * деактивация и активация карты, формы и фильтра
   * @param {param} flag - флаг
@@ -58,7 +56,7 @@
         fieldsetItem.removeAttribute('disabled', 'disabled');
       });
       window.backend.load(onLoad, onError);
-      mainMark.removeEventListener('mousedown', onPressMainMark);
+      mainMark.removeEventListener('mousedown', onClickMainMark);
       mainMark.removeEventListener('keydown', onPressMainMark);
     }
   };
@@ -67,14 +65,24 @@
   * вызывает функцию при нажатии левой кнопки мыши или Enter
   * @param {Object} evt - объект хранит последнее событие
   */
+  var onClickMainMark = function (evt) {
+    if (evt.button === 0) {
+      makeInactive(false);
+    }
+  };
+
+  /**
+  * вызывает функцию при нажатии левой кнопки мыши или Enter
+  * @param {Object} evt - объект хранит последнее событие
+  */
   var onPressMainMark = function (evt) {
-    if (evt.button === 0 || evt.key === 'Enter') {
+    if (evt.key === 'Enter') {
       makeInactive(false);
     }
   };
 
   makeInactive(true);
   window.form.getAddress();
-  mainMark.addEventListener('mousedown', onPressMainMark);
+  mainMark.addEventListener('mousedown', onClickMainMark);
   mainMark.addEventListener('keydown', onPressMainMark);
 })();
