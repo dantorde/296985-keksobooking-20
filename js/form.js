@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var MAIN_MARK_SIZE = 62;
-  var MARK_ARROW_HEIGHT = 22;
   var minimumPrice = {
     bungalo: 0,
     flat: 1000,
@@ -17,18 +15,6 @@
   };
   var roomsSelect = document.querySelector('#room_number');
   var guestsSelect = document.querySelector('#capacity');
-
-  /**
-  * получение адреса по координатам
-  */
-  var getAddress = function () {
-    var mainMark = document.querySelector('.map__pin--main');
-    var mainMarkX = parseInt(mainMark.style.left, 10);
-    var mainMarkY = parseInt(mainMark.style.top, 10);
-    var inputAddress = document.querySelector('#address');
-    inputAddress.value = Math.round(mainMarkX + MAIN_MARK_SIZE / 2) + ', ' + Math.round(mainMarkY + MAIN_MARK_SIZE + MARK_ARROW_HEIGHT);
-  };
-
 
   /**
    * проверка соответствия количества комнат количеству гостей
@@ -96,10 +82,4 @@
   guestsSelect.addEventListener('change', checkGuestRoomConformity);
   var timeFields = document.querySelector('.ad-form__element--time');
   timeFields.addEventListener('change', setTimeValue);
-
-  getAddress();
-
-  window.form = {
-    getAddress: getAddress
-  };
 })();
