@@ -5,18 +5,10 @@
   var mainMark = document.querySelector('.map__pin--main');
 
   /**
-  * выводит элементы на карту в случае успешной загрузки с сервера
-  * @param {array} dataAds - массив объявлений
-  */
-  var onLoad = function (dataAds) {
-    window.map.generateMarks(dataAds);
-  };
-
-  /**
   * выводит ошибку в случае неуспешной загрузки с сервера
   * @param {param} errorMessage - сообщение
   */
-  var onError = function (errorMessage) {
+  var showErrorMessage = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -32,21 +24,13 @@
   * деактивация и активация карты, формы и фильтра
   * @param {param} flag - флаг
   */
-  var makeInactive = function (flag) {
+  var makeActivePage = function (flag) {
     var adForm = document.querySelector('.ad-form');
     var fieldsetAdFormArr = adForm.querySelectorAll('fieldset');
     var filterForm = document.querySelector('.map__filters');
     var fieldsetFilterFormArr = filterForm.querySelectorAll('fieldset');
 
     if (flag === true) {
-      adForm.classList.add('ad-form--disabled');
-      fieldsetAdFormArr.forEach(function (fieldsetItem) {
-        fieldsetItem.setAttribute('disabled', 'disabled');
-      });
-      fieldsetFilterFormArr.forEach(function (fieldsetItem) {
-        fieldsetItem.setAttribute('disabled', 'disabled');
-      });
-    } else {
       mapBlock.classList.remove('map--faded');
       adForm.classList.remove('ad-form--disabled');
       fieldsetAdFormArr.forEach(function (fieldsetItem) {
@@ -55,9 +39,19 @@
       fieldsetFilterFormArr.forEach(function (fieldsetItem) {
         fieldsetItem.removeAttribute('disabled', 'disabled');
       });
-      window.backend.load(onLoad, onError);
+      window.backend.load(window.map.generateMarks, showErrorMessage);
       mainMark.removeEventListener('mousedown', onClickMainMark);
       mainMark.removeEventListener('keydown', onPressMainMark);
+
+
+    } else {
+      adForm.classList.add('ad-form--disabled');
+      fieldsetAdFormArr.forEach(function (fieldsetItem) {
+        fieldsetItem.setAttribute('disabled', 'disabled');
+      });
+      fieldsetFilterFormArr.forEach(function (fieldsetItem) {
+        fieldsetItem.setAttribute('disabled', 'disabled');
+      });
     }
   };
 
@@ -67,7 +61,7 @@
   */
   var onClickMainMark = function (evt) {
     if (evt.button === 0) {
-      makeInactive(false);
+      makeActivePage(true);
     }
   };
 
@@ -77,12 +71,12 @@
   */
   var onPressMainMark = function (evt) {
     if (evt.key === 'Enter') {
-      makeInactive(false);
+      makeActivePage(true);
     }
   };
 
-  makeInactive(true);
-  window.form.getAddress();
+  makeActivePage(false);
+  window.move.getAddress();
   mainMark.addEventListener('mousedown', onClickMainMark);
   mainMark.addEventListener('keydown', onPressMainMark);
 })();
