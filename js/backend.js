@@ -10,7 +10,6 @@
   var load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-
     xhr.addEventListener('load', function () {
       if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
@@ -29,6 +28,7 @@
 
     xhr.open('GET', URL_LOAD);
     xhr.send();
+
   };
 
   window.backend = {

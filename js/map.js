@@ -2,15 +2,16 @@
 
 (function () {
   var marksMap = document.querySelector('.map__pins');
+
   /**
   * генерация меток на основе созданного массива объявлений
-  * @param {array} dataAds - массив объктов
+  * @param {array} array - массив объктов
   * @return {object} объект
   */
-  var generateMarks = function (dataAds) {
+  var generateMarks = function (array) {
     var marksFragment = document.createDocumentFragment();
-    dataAds.forEach(function (dataAd) {
-      marksFragment.appendChild(window.mark.create(dataAd));
+    array.forEach(function (el) {
+      marksFragment.appendChild(window.mark.create(el));
     });
     return marksMap.appendChild(marksFragment);
   };
