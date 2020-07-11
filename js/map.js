@@ -2,6 +2,7 @@
 
 (function () {
   var marksMap = document.querySelector('.map__pins');
+
   /**
   * генерация меток на основе созданного массива объявлений
   * @param {array} dataAds - массив объктов

@@ -30,7 +30,7 @@
     var filterForm = document.querySelector('.map__filters');
     var fieldsetFilterFormArr = filterForm.querySelectorAll('fieldset');
 
-    if (flag === true) {
+    if (flag) {
       mapBlock.classList.remove('map--faded');
       adForm.classList.remove('ad-form--disabled');
       fieldsetAdFormArr.forEach(function (fieldsetItem) {
@@ -39,7 +39,7 @@
       fieldsetFilterFormArr.forEach(function (fieldsetItem) {
         fieldsetItem.removeAttribute('disabled', 'disabled');
       });
-      window.backend.load(window.map.generateMarks, showErrorMessage);
+      window.backend.load(window.load.ads, showErrorMessage);
       mainMark.removeEventListener('mousedown', onClickMainMark);
       mainMark.removeEventListener('keydown', onPressMainMark);
 
@@ -79,4 +79,5 @@
   window.move.getAddress();
   mainMark.addEventListener('mousedown', onClickMainMark);
   mainMark.addEventListener('keydown', onPressMainMark);
+
 })();
