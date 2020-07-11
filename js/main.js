@@ -5,22 +5,6 @@
   var mainMark = document.querySelector('.map__pin--main');
 
   /**
-  * выводит ошибку в случае неуспешной загрузки с сервера
-  * @param {param} errorMessage - сообщение
-  */
-  var showErrorMessage = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-
-  /**
   * деактивация и активация карты, формы и фильтра
   * @param {param} flag - флаг
   */
@@ -36,10 +20,7 @@
       fieldsetAdFormArr.forEach(function (fieldsetItem) {
         fieldsetItem.removeAttribute('disabled', 'disabled');
       });
-      fieldsetFilterFormArr.forEach(function (fieldsetItem) {
-        fieldsetItem.removeAttribute('disabled', 'disabled');
-      });
-      window.backend.load(window.load.ads, showErrorMessage);
+      window.backend.load(window.load.ads, window.error.showMessage);
       mainMark.removeEventListener('mousedown', onClickMainMark);
       mainMark.removeEventListener('keydown', onPressMainMark);
 

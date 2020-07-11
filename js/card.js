@@ -62,8 +62,18 @@
     return card;
   };
 
+  /**
+  * удаление со страницы открытой карточки объявления
+  */
+  var clearCard = function () {
+    if (document.querySelector('.map__card')) {
+      document.querySelector('.map__card').remove();
+    }
+  };
+
 
   window.card = {
-    create: createCard
+    create: createCard,
+    clear: clearCard
   };
 })();
