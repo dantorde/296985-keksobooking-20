@@ -61,4 +61,11 @@
   mainMark.addEventListener('mousedown', onClickMainMark);
   mainMark.addEventListener('keydown', onPressMainMark);
 
+  var value = {
+    'one': 'class-one',
+    'two': 'class-two'
+  };
+  value['one'];
+  console.log(value['one'])
+
 })();
