@@ -2,7 +2,23 @@
 
 (function () {
   var mapBlock = document.querySelector('.map');
-  var mainMark = document.querySelector('.map__pin--main');
+  var mainMark = mapBlock.querySelector('.map__pin--main');
+  var filterForm = mapBlock.querySelector('.map__filters');
+  var MAX_AMAUNT_ADS = 5;
+  var dataAds = [];
+
+
+  function loadAds(data) {
+    dataAds = data;
+    window.map.renderAds(dataAds);
+  }
+
+  function onFilterChange() {
+    window.map.removeMarks();
+    window.card.clear();
+    var filterAds = window.util.sliceArray(dataAds.filter(window.fiter.array), MAX_AMAUNT_ADS);
+    window.map.renderAds(filterAds);
+  }
 
   /**
   * деактивация и активация карты, формы и фильтра
@@ -11,7 +27,6 @@
   var makeActivePage = function (flag) {
     var adForm = document.querySelector('.ad-form');
     var fieldsetAdFormArr = adForm.querySelectorAll('fieldset');
-    var filterForm = document.querySelector('.map__filters');
     var fieldsetFilterFormArr = filterForm.querySelectorAll('fieldset');
 
     if (flag) {
@@ -20,7 +35,7 @@
       fieldsetAdFormArr.forEach(function (fieldsetItem) {
         fieldsetItem.removeAttribute('disabled', 'disabled');
       });
-      window.backend.load(window.load.ads, window.error.showMessage);
+      window.backend.load(loadAds, window.error.showMessage);
       mainMark.removeEventListener('mousedown', onClickMainMark);
       mainMark.removeEventListener('keydown', onPressMainMark);
 
@@ -61,11 +76,6 @@
   mainMark.addEventListener('mousedown', onClickMainMark);
   mainMark.addEventListener('keydown', onPressMainMark);
 
-  var value = {
-    'one': 'class-one',
-    'two': 'class-two'
-  };
-  value['one'];
-  console.log(value['one'])
+  filterForm.addEventListener('change', window.debounce.out(onFilterChange));
 
 })();
