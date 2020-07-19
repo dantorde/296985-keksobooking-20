@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var LEFT_MOUSE_BUTTON_CODE = 0;
+
   var minimumPrice = {
     bungalo: 0,
     flat: 1000,
@@ -15,6 +17,98 @@
   };
   var roomsSelect = document.querySelector('#room_number');
   var guestsSelect = document.querySelector('#capacity');
+  var formAddАdvert = document.querySelector('.ad-form');
+  var resetButton = document.querySelector('.ad-form__reset');
+
+  var onFormResetPress = function () {
+    window.main.makeActivePage(false);
+  };
+
+  /**
+   * Вызывает функцию отправки данных на сервер
+   * @param {Object} evt - событие submit
+   */
+  var onSubmitPress = function (evt) {
+    window.backend.save(new FormData(formAddАdvert), function () {
+      window.main.makeActivePage(false);
+      sendPopupShow();
+    }, errorPopupShow);
+    evt.preventDefault();
+  };
+
+
+  /**
+   * Проверка на левую кнопку мыши и запуск функции скрытия окна успешной отправки или ошибки
+   * @param {Object} evt - нажатая кнопка мыши
+   */
+  var onPopupMousePress = function (evt) {
+    if (evt.button === LEFT_MOUSE_BUTTON_CODE && document.querySelector('.success') !== null) {
+      closePopup(true);
+    } else if (evt.button === LEFT_MOUSE_BUTTON_CODE && evt.target.classList.value !== 'error__message' && document.querySelector('.error') !== null) {
+      closePopup(false);
+    }
+  };
+
+  /**
+   * функция появления и скрытия сообщения об Успехе при отправке формы на сервер
+   */
+  var sendPopupShow = function () {
+    var successTemplate = document.querySelector('#success').content;
+    var success = successTemplate.cloneNode(true);
+    var main = document.querySelector('main');
+    main.appendChild(success);
+    document.addEventListener('keydown', onPopupEscPress);
+    document.addEventListener('mousedown', onPopupMousePress);
+  };
+
+  var closePopup = function (flag) {
+    if (flag) {
+      document.querySelector('.success').remove();
+      document.removeEventListener('keydown', onPopupEscPress);
+    } else {
+      document.querySelector('.error').remove();
+      document.removeEventListener('keydown', onPopupEscPress);
+    }
+    document.removeEventListener('mousedown', onPopupMousePress);
+  };
+  /**
+   * Проверка на клавишу ESC и запуск функции скрытия окна ошибки или окна успешной отправки
+   * @param {Object} evt - нажатая клавиша
+   */
+  var onPopupEscPress = function (evt) {
+    if (evt.key === 'Escape' && document.querySelector('.success') !== null) {
+      evt.preventDefault();
+      closePopup(true);
+    } else if (evt.key === 'Escape' && document.querySelector('.error') !== null) {
+      closePopup(false);
+    }
+  };
+
+
+  /**
+   * функция появления и скрытия сообщения об Ошибке при отправке формы на сервер
+   */
+  var errorPopupShow = function () {
+    var successTemplate = document.querySelector('#error').content;
+    var error = successTemplate.cloneNode(true);
+    var main = document.querySelector('main');
+    main.appendChild(error);
+
+    var errorShow = document.querySelector('.error');
+    var errorButton = errorShow.querySelector('.error__button');
+
+    document.addEventListener('click', onPopupMousePress);
+
+    document.addEventListener('keydown', onPopupEscPress);
+
+    errorButton.addEventListener('mousedown', function (evt) {
+      if (evt.button === LEFT_MOUSE_BUTTON_CODE) {
+        document.querySelector('.error').remove();
+        document.removeEventListener('mousedown', onPopupMousePress);
+        document.removeEventListener('keydown', onPopupEscPress);
+      }
+    });
+  };
 
   /**
    * проверка соответствия количества комнат количеству гостей
@@ -82,4 +176,9 @@
   guestsSelect.addEventListener('change', checkGuestRoomConformity);
   var timeFields = document.querySelector('.ad-form__element--time');
   timeFields.addEventListener('change', setTimeValue);
+
+  resetButton.addEventListener('click', onFormResetPress);
+
+  formAddАdvert.addEventListener('submit', onSubmitPress);
+
 })();

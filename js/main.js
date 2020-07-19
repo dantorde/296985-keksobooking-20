@@ -6,7 +6,19 @@
   var filterForm = mapBlock.querySelector('.map__filters');
   var MAX_AMAUNT_ADS = 5;
   var dataAds = [];
-
+  var mapPinMain = document.querySelector('.map__pin--main');
+  var defaultMainPinPosition = mapPinMain.style.cssText;
+  var inputRoomNumber = document.querySelector('#room_number');
+  var defaultInputRoomNumber = inputRoomNumber.value;
+  var inputTimeIn = document.querySelector('#timein');
+  var defaultInputTimeIn = inputTimeIn.value;
+  var inputTimeOut = document.querySelector('#timeout');
+  var defaultInputTimeOut = inputTimeOut.value;
+  var inputRoomType = document.querySelector('#type');
+  var defaultInputRoomType = inputRoomType.value;
+  var inputTitle = document.querySelector('#title');
+  var inputPrice = document.querySelector('#price');
+  var inputDescription = document.querySelector('#description');
 
   function loadAds(data) {
     dataAds = data;
@@ -25,9 +37,11 @@
   * @param {param} flag - флаг
   */
   var makeActivePage = function (flag) {
+    var map = document.querySelector('.map');
     var adForm = document.querySelector('.ad-form');
     var fieldsetAdFormArr = adForm.querySelectorAll('fieldset');
     var fieldsetFilterFormArr = filterForm.querySelectorAll('fieldset');
+    var selectFilterFormArr = filterForm.querySelectorAll('select');
 
     if (flag) {
       mapBlock.classList.remove('map--faded');
@@ -38,16 +52,29 @@
       window.backend.load(loadAds, window.error.showMessage);
       mainMark.removeEventListener('mousedown', onClickMainMark);
       mainMark.removeEventListener('keydown', onPressMainMark);
-
-
     } else {
+      map.classList.add('map--faded');
       adForm.classList.add('ad-form--disabled');
       fieldsetAdFormArr.forEach(function (fieldsetItem) {
         fieldsetItem.setAttribute('disabled', 'disabled');
       });
+      selectFilterFormArr.forEach(function (selectItem) {
+        selectItem.setAttribute('disabled', 'disabled');
+      });
       fieldsetFilterFormArr.forEach(function (fieldsetItem) {
         fieldsetItem.setAttribute('disabled', 'disabled');
       });
+      inputTitle.value = '';
+      inputPrice.value = '';
+      inputDescription.value = '';
+      mapPinMain.style.cssText = defaultMainPinPosition;
+      inputRoomNumber.value = defaultInputRoomNumber;
+      inputRoomType.value = defaultInputRoomType;
+      inputTimeIn.value = defaultInputTimeIn;
+      inputTimeOut.value = defaultInputTimeOut;
+      window.map.removeMarks();
+      mainMark.addEventListener('mousedown', onClickMainMark);
+      mainMark.addEventListener('keydown', onPressMainMark);
     }
   };
 
@@ -73,9 +100,11 @@
 
   makeActivePage(false);
   window.move.getAddress();
-  mainMark.addEventListener('mousedown', onClickMainMark);
-  mainMark.addEventListener('keydown', onPressMainMark);
 
   filterForm.addEventListener('change', window.debounce.out(onFilterChange));
+
+  window.main = {
+    makeActivePage: makeActivePage
+  };
 
 })();

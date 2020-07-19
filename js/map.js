@@ -32,8 +32,12 @@
   var renderAds = function (data) {
     var filterForm = document.querySelector('.map__filters');
     var fieldsetFilterFormArr = filterForm.querySelectorAll('fieldset');
+    var selectFilterFormArr = filterForm.querySelectorAll('select');
     fieldsetFilterFormArr.forEach(function (fieldsetItem) {
       fieldsetItem.removeAttribute('disabled', 'disabled');
+    });
+    selectFilterFormArr.forEach(function (selectItem) {
+      selectItem.removeAttribute('disabled', 'disabled');
     });
     var ads = window.util.sliceArray(data, MAX_AMAUNT_ADS);
     generateMarks(ads);
