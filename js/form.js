@@ -21,7 +21,7 @@
   var resetButton = document.querySelector('.ad-form__reset');
 
   var onFormResetPress = function () {
-    window.move.getAddress();
+    window.main.makeActivePage(false);
   };
 
   /**
