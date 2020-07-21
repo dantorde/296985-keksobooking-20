@@ -1,23 +1,31 @@
 'use strict';
 
 (function () {
+
+  var FilterPrice = {
+    MIN: 10000,
+    MAX: 50000
+  };
+
+  var HousePriceValue = {
+    LOW: 'low',
+    HIGH: 'high',
+    MIDDLE: 'middle'
+  };
+
+  var filterForm = document.querySelector('.map__filters');
+  var selectHouseType = filterForm.querySelector('#housing-type');
+  var selectHousePrice = filterForm.querySelector('#housing-price');
+  var selectHouseRooms = filterForm.querySelector('#housing-rooms');
+  var selectHouseGuests = filterForm.querySelector('#housing-guests');
+
   var filteredArray = function (element) {
-    var FilterPrice = {
-      MIN: 10000,
-      MAX: 50000
-    };
 
-    var HousePriceValue = {
-      LOW: 'low',
-      HIGH: 'high',
-      MIDDLE: 'middle'
-    };
 
-    var filterForm = document.querySelector('.map__filters');
-    var houseType = filterForm.querySelector('#housing-type').value;
-    var housePrice = filterForm.querySelector('#housing-price').value;
-    var houseRooms = filterForm.querySelector('#housing-rooms').value.toString();
-    var houseGuests = filterForm.querySelector('#housing-guests').value.toString();
+    var houseType = selectHouseType.value;
+    var housePrice = selectHousePrice.value;
+    var houseRooms = selectHouseRooms.value.toString();
+    var houseGuests = selectHouseGuests.value.toString();
 
     var isType = true;
     var isRooms = true;

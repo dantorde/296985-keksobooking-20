@@ -20,6 +20,9 @@
   var formAddАdvert = document.querySelector('.ad-form');
   var resetButton = document.querySelector('.ad-form__reset');
 
+  var avatarChooser = document.querySelector('.ad-form__field input[type=file]');
+  var photoChooser = document.querySelector('.ad-form__upload input[type=file]');
+
   var onFormResetPress = function () {
     window.main.makeActivePage(false);
   };
@@ -180,5 +183,8 @@
   resetButton.addEventListener('click', onFormResetPress);
 
   formAddАdvert.addEventListener('submit', onSubmitPress);
+
+  avatarChooser.addEventListener('change', window.photo.onAvatarPress);
+  photoChooser.addEventListener('change', window.photo.onPhotoPress);
 
 })();

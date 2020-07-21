@@ -20,17 +20,17 @@
   var inputPrice = document.querySelector('#price');
   var inputDescription = document.querySelector('#description');
 
-  function loadAds(data) {
+  var loadAds = function (data) {
     dataAds = data;
     window.map.renderAds(dataAds);
-  }
+  };
 
-  function onFilterChange() {
+  var onFilterChange = function () {
     window.map.removeMarks();
     window.card.clear();
     var filterAds = window.util.sliceArray(dataAds.filter(window.fiter.array), MAX_AMAUNT_ADS);
     window.map.renderAds(filterAds);
-  }
+  };
 
   /**
   * деактивация и активация карты, формы и фильтра
@@ -73,6 +73,7 @@
       inputTimeIn.value = defaultInputTimeIn;
       inputTimeOut.value = defaultInputTimeOut;
       window.map.removeMarks();
+      window.photo.clearPhotoInput();
       mainMark.addEventListener('mousedown', onClickMainMark);
       mainMark.addEventListener('keydown', onPressMainMark);
     }
