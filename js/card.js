@@ -3,18 +3,18 @@
 (function () {
   /**
    * получение фото из массива для карточки
-   * @param {object} dataAd - элемент массива объявлений
+   * @param {object} dataOffer - элемент массива объявлений
    * @return {element} - элементы
    */
-  var getPhotos = function (dataAd) {
+  var getPhotos = function (dataOffer) {
     var cardEl = document.querySelector('#card')
       .content.querySelector('.map__card');
     var photoContainer = cardEl.querySelector('.popup__photos');
-    var photoArr = dataAd.offer.photos;
+    var photoArrayr = dataOffer.offer.photos;
     var photoFragment = document.createDocumentFragment();
-    photoArr.forEach(function (photoAr) {
+    photoArrayr.forEach(function (photoArray) {
       var photo = photoContainer.querySelector('.popup__photo').cloneNode(true);
-      photo.src = photoAr;
+      photo.src = photoArray;
       photoFragment.appendChild(photo);
     });
     return photoFragment;
@@ -22,43 +22,43 @@
 
   /**
    * сравнение массивов на совпадения
-   * @param {object} dataAd - элемент массива объявлений
+   * @param {object} dataOffer - элемент массива объявлений
    * @return {element} featureFragment - элементы
    */
-  var getFeatures = function (dataAd) {
-    var featuresArr = dataAd.offer.features;
+  var getFeatures = function (dataOffer) {
+    var featuresArr = dataOffer.offer.features;
     var featureFragment = document.createDocumentFragment();
     featuresArr.forEach(function (feature) {
-      var featureElement = document.createElement('li');
-      featureElement.classList.add('popup__feature', 'popup__feature--' + feature);
-      featureFragment.appendChild(featureElement);
+      var featureItem = document.createElement('li');
+      featureItem.classList.add('popup__feature', 'popup__feature--' + feature);
+      featureFragment.appendChild(featureItem);
     });
     return featureFragment;
   };
 
   /**
    * генерация карточки на основе созданного массива объявлений
-   * @param {object} dataAd - элемент массива объявлений
+   * @param {object} dataOffer - элемент массива объявлений
    * @return {object} card - объект
    */
-  var createCard = function (dataAd) {
+  var createCard = function (dataOffer) {
     var cardTemplate = document.querySelector('#card')
     .content.querySelector('.map__card');
     var card = cardTemplate.cloneNode(true);
-    card.querySelector('.popup__title').textContent = dataAd.title;
-    card.querySelector('.popup__text--address').textContent = dataAd.offer.address;
-    card.querySelector('.popup__text--price').textContent = dataAd.offer.price + ' ₽/ночь';
-    card.querySelector('.popup__type').textContent = dataAd.offer.type;
-    card.querySelector('.popup__text--capacity').textContent = dataAd.offer.rooms + ' комнаты для ' + dataAd.offer.guests + ' гостей';
-    card.querySelector('.popup__text--time').textContent = 'Заезд после ' + dataAd.offer.checkin + ', выезд до ' + dataAd.offer.checkout;
-    card.querySelector('.popup__description').textContent = dataAd.offer.description;
-    card.querySelector('.popup__avatar').src = dataAd.author.avatar;
-    var popPhoto = card.querySelector('.popup__photos');
-    popPhoto.innerHTML = '';
-    popPhoto.appendChild(getPhotos(dataAd));
+    card.querySelector('.popup__title').textContent = dataOffer.title;
+    card.querySelector('.popup__text--address').textContent = dataOffer.offer.address;
+    card.querySelector('.popup__text--price').textContent = dataOffer.offer.price + ' ₽/ночь';
+    card.querySelector('.popup__type').textContent = dataOffer.offer.type;
+    card.querySelector('.popup__text--capacity').textContent = dataOffer.offer.rooms + ' комнаты для ' + dataOffer.offer.guests + ' гостей';
+    card.querySelector('.popup__text--time').textContent = 'Заезд после ' + dataOffer.offer.checkin + ', выезд до ' + dataOffer.offer.checkout;
+    card.querySelector('.popup__description').textContent = dataOffer.offer.description;
+    card.querySelector('.popup__avatar').src = dataOffer.author.avatar;
+    var popupPhoto = card.querySelector('.popup__photos');
+    popupPhoto.innerHTML = '';
+    popupPhoto.appendChild(getPhotos(dataOffer));
     var popFeatures = card.querySelector('.popup__features');
     popFeatures.innerHTML = '';
-    popFeatures.appendChild(getFeatures(dataAd));
+    popFeatures.appendChild(getFeatures(dataOffer));
     return card;
   };
 
