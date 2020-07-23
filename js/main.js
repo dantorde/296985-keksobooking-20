@@ -4,8 +4,7 @@
   var mapBlock = document.querySelector('.map');
   var mainMark = mapBlock.querySelector('.map__pin--main');
   var filterForm = mapBlock.querySelector('.map__filters');
-  var MAX_AMAUNT_ADS = 5;
-  var dataAds = [];
+  var dataOffers = [];
   var mapPinMain = document.querySelector('.map__pin--main');
   var defaultMainPinPosition = mapPinMain.style.cssText;
   var inputRoomNumber = document.querySelector('#room_number');
@@ -21,14 +20,14 @@
   var inputDescription = document.querySelector('#description');
 
   var loadAds = function (data) {
-    dataAds = data;
-    window.map.renderAds(dataAds);
+    dataOffers = data;
+    window.map.renderAds(dataOffers);
   };
 
   var onFilterChange = function () {
     window.map.removeMarks();
     window.card.clear();
-    var filterAds = window.util.sliceArray(dataAds.filter(window.fiter.array), MAX_AMAUNT_ADS);
+    var filterAds = window.fiter.array(dataOffers);
     window.map.renderAds(filterAds);
   };
 

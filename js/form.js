@@ -116,7 +116,7 @@
   /**
    * проверка соответствия количества комнат количеству гостей
    */
-  var checkGuestRoomConformity = function () {
+  var onGuestRoomSelectChange = function () {
     var currentGuests = parseInt(guestsSelect.value, 10);
     if (!roomsGuests[roomsSelect.value].includes(currentGuests)) {
       guestsSelect.setCustomValidity('Выберите другое количество комнат или гостей');
@@ -129,7 +129,7 @@
    * получение соответствия времени заезда и времени выезда
    * @param {Object} evt - объект хранит последнее событие
    */
-  var setTimeValue = function (evt) {
+  var onTimeSelectChange = function (evt) {
     var timeFields = document.querySelector('.ad-form__element--time');
     var selectFields = timeFields.querySelectorAll('select');
     selectFields.forEach(function (selectItem) {
@@ -175,10 +175,10 @@
   });
 
 
-  roomsSelect.addEventListener('change', checkGuestRoomConformity);
-  guestsSelect.addEventListener('change', checkGuestRoomConformity);
+  roomsSelect.addEventListener('change', onGuestRoomSelectChange);
+  guestsSelect.addEventListener('change', onGuestRoomSelectChange);
   var timeFields = document.querySelector('.ad-form__element--time');
-  timeFields.addEventListener('change', setTimeValue);
+  timeFields.addEventListener('change', onTimeSelectChange);
 
   resetButton.addEventListener('click', onFormResetPress);
 

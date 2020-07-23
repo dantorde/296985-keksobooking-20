@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var MAX_AMAUNT_ADS = 5;
-
   var marksMap = document.querySelector('.map__pins');
 
   var removeMarks = function () {
@@ -39,7 +37,7 @@
     selectFilterFormArr.forEach(function (selectItem) {
       selectItem.removeAttribute('disabled', 'disabled');
     });
-    var ads = window.util.sliceArray(data, MAX_AMAUNT_ADS);
+    var ads = window.util.sliceArray(data, window.util.MAX_AMAUNT_ADS);
     generateMarks(ads);
   };
 

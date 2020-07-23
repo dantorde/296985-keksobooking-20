@@ -1,75 +1,56 @@
 'use strict';
 
 (function () {
-
-  var FilterPrice = {
-    MIN: 10000,
-    MAX: 50000
+  var filterPrice = {
+    'low': {
+      start: 0,
+      end: 10000
+    },
+    'middle': {
+      start: 10000,
+      end: 50000
+    },
+    'high': {
+      start: 50000,
+      end: Infinity
+    }
   };
 
-  var HousePriceValue = {
-    LOW: 'low',
-    HIGH: 'high',
-    MIDDLE: 'middle'
-  };
+  var filterItems = Array.from(document.querySelector('.map__filters').children);
 
-  var filterForm = document.querySelector('.map__filters');
-  var selectHouseType = filterForm.querySelector('#housing-type');
-  var selectHousePrice = filterForm.querySelector('#housing-price');
-  var selectHouseRooms = filterForm.querySelector('#housing-rooms');
-  var selectHouseGuests = filterForm.querySelector('#housing-guests');
+  var filterRules = {
+    'housing-type': function (data, filter) {
+      return filter.value === data.offer.type;
+    },
+    'housing-rooms': function (data, filter) {
+      return filter.value === data.offer.rooms.toString();
+    },
+    'housing-guests': function (data, filter) {
+      return filter.value === data.offer.guests.toString();
+    },
+    'housing-price': function (data, filter) {
+      return data.offer.price >= filterPrice[filter.value].start && data.offer.price < filterPrice[filter.value].end;
+    },
+    'housing-features': function (data, filter) {
+      var checkListElements = Array.from(filter.querySelectorAll('input[type="checkbox"]:checked'));
 
-  var filteredArray = function (element) {
-
-
-    var houseType = selectHouseType.value;
-    var housePrice = selectHousePrice.value;
-    var houseRooms = selectHouseRooms.value.toString();
-    var houseGuests = selectHouseGuests.value.toString();
-
-    var isType = true;
-    var isRooms = true;
-    var isGuests = true;
-    var isPrice = true;
-    var isFeatures = true;
-
-    var checkedFeatures = filterForm.querySelectorAll('input[name="features"]:checked');
-    if (checkedFeatures.length) {
-      checkedFeatures.forEach(function (feature) {
-        if (element.offer.features.indexOf(feature.value) === -1) {
-          isFeatures = false;
-        }
+      return checkListElements.every(function (checkListElement) {
+        return data.offer.features.some(function (feature) {
+          return feature === checkListElement.value;
+        });
       });
     }
+  };
 
-    if (houseType !== 'any') {
-      isType = element.offer.type === houseType;
-    }
-    if (houseRooms !== 'any') {
-      isRooms = element.offer.rooms.toString() === houseRooms;
-    }
-    if (houseGuests !== 'any') {
-      isGuests = element.offer.guests.toString() === houseGuests;
-    }
-
-    if (housePrice !== 'any') {
-      var elementPrice = element.offer.price.toString();
-      var price;
-      if (elementPrice < FilterPrice.MIN) {
-        price = HousePriceValue.LOW;
-      }
-      if (elementPrice > FilterPrice.MIN) {
-        price = HousePriceValue.HIGH;
-      }
-      if (elementPrice < FilterPrice.MAX && elementPrice > FilterPrice.MIN) {
-        price = HousePriceValue.MIDDLE;
-      }
-      isPrice = price === housePrice;
-    }
-    return isType && isRooms && isGuests && isPrice && isFeatures;
+  var filterArray = function (array) {
+    return array.filter(function (item) {
+      return filterItems.every(function (filterItem) {
+        return (filterItem.value === 'any') ? true : filterRules[filterItem.id](item, filterItem);
+      });
+    });
   };
 
   window.fiter = {
-    array: filteredArray
+    array: filterArray
   };
 })();
