@@ -3,7 +3,7 @@
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-  var PhotoPreviewElement = {
+  var PhotoPreviewItem = {
     ALT: 'Изображение жилья',
     WIDTH: '70px',
     HEIGHT: '70px'
@@ -38,15 +38,15 @@
 
   /**
   * Функция создания изображения и добавления его в разметку
-  * @return {*} photoElement
+  * @return {*} photoItem
   */
   var createPhotoPreview = function () {
-    var photoElement = document.createElement('img');
-    photoElement.alt = PhotoPreviewElement.ALT;
-    photoElement.style.width = PhotoPreviewElement.WIDTH;
-    photoElement.style.height = PhotoPreviewElement.HEIGHT;
+    var photoItem = document.createElement('img');
+    photoItem.alt = PhotoPreviewItem.ALT;
+    photoItem.style.width = PhotoPreviewItem.WIDTH;
+    photoItem.style.height = PhotoPreviewItem.HEIGHT;
 
-    return photoElement;
+    return photoItem;
   };
 
   var clearPhotoInput = function () {

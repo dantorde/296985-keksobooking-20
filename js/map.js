@@ -17,9 +17,10 @@
   */
   var generateMarks = function (array) {
     var marksFragment = document.createDocumentFragment();
-    array.forEach(function (el) {
+    for (var i = 0; i < window.util.MAX_AMAUNT_ADS && typeof array[i] !== 'undefined'; i++) {
+      var el = array[i];
       marksFragment.appendChild(window.mark.create(el));
-    });
+    }
     return marksMap.appendChild(marksFragment);
   };
 
@@ -37,12 +38,12 @@
     selectFilterFormArr.forEach(function (selectItem) {
       selectItem.removeAttribute('disabled', 'disabled');
     });
-    var ads = window.util.sliceArray(data, window.util.MAX_AMAUNT_ADS);
-    generateMarks(ads);
+    generateMarks(data);
   };
 
   window.map = {
     renderAds: renderAds,
-    removeMarks: removeMarks
+    removeMarks: removeMarks,
+    generateMarks: generateMarks
   };
 })();

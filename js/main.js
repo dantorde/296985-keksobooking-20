@@ -27,8 +27,7 @@
   var onFilterChange = function () {
     window.map.removeMarks();
     window.card.clear();
-    var filterAds = window.fiter.array(dataOffers);
-    window.map.renderAds(filterAds);
+    window.map.generateMarks(window.filter.getArray(dataOffers));
   };
 
   /**

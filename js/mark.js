@@ -11,8 +11,22 @@
   * @return {element} - элемент
   */
   var createMark = function (dataOffer) {
-    var markTemplate = document.querySelector('#pin')
-    .content.querySelector('.map__pin');
+    var markTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+    var mark = markTemplate.cloneNode(true);
+    mark.style.left = dataOffer.location.x - PinSize.X / 2 + 'px';
+    mark.style.top = dataOffer.location.y - PinSize.Y + 'px';
+    var img = mark.querySelector('img');
+    img.src = dataOffer.author.avatar;
+    img.alt = dataOffer.offer.title;
+    mark.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      window.popup.openCard(dataOffer);
+    });
+    return mark;
+  };
+
+  var qcreateMark = function (dataOffer) {
+    var markTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
     var mark = markTemplate.cloneNode(true);
     mark.style.left = dataOffer.location.x - PinSize.X / 2 + 'px';
     mark.style.top = dataOffer.location.y - PinSize.Y + 'px';
@@ -26,7 +40,8 @@
     return mark;
   };
   window.mark = {
-    create: createMark
+    create: createMark,
+    qcreateMark: qcreateMark
   };
 
 })();
